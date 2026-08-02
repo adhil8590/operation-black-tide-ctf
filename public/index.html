@@ -140,13 +140,13 @@
       <!-- Investigation Progress Tracker -->
       <div class="flag-tracker-card card glass-card">
         <h3>INVESTIGATION PROGRESS</h3>
-        <div class="flag-step completed" id="stepFlag1">
-          <div class="flag-icon">🔑</div>
+        <div class="flag-step locked" id="stepFlag1">
+          <div class="flag-icon" id="iconFlag1">🔒</div>
           <div class="flag-info">
             <strong class="flag-name">INITIAL FOOTHOLD</strong>
-            <span class="flag-val">AEGIS{ENTRY-7D9A-88E2}</span>
+            <span class="flag-val" id="flag1Val">SEALED</span>
           </div>
-          <div class="flag-badge">RECOVERED</div>
+          <div class="flag-badge" id="badgeFlag1">LOCKED</div>
         </div>
         <div class="flag-step locked" id="stepFlag2">
           <div class="flag-icon">🔒</div>
@@ -190,9 +190,9 @@
           <span class="quote-author" style="display:block;margin-top:10px;font-size:0.8rem;color:#94a3b8;">— Black Tide Operative Zero</span>
         </div>
         <div class="flags-summary">
-          <div class="summary-item"><strong>FIRST SIGIL:</strong> AEGIS{ENTRY-7D9A-88E2}</div>
-          <div class="summary-item"><strong>SECOND SIGIL:</strong> AEGIS{PRIV-C4F8-15B7}</div>
-          <div class="summary-item"><strong>CHIMERA VESSEL:</strong> AEGIS{CHMR-E1A6-9D40}</div>
+          <div class="summary-item"><strong>FIRST SIGIL:</strong> <span id="summaryFlag1">SEALED</span></div>
+          <div class="summary-item"><strong>SECOND SIGIL:</strong> <span id="summaryFlag2">SEALED</span></div>
+          <div class="summary-item"><strong>CHIMERA VESSEL:</strong> <span id="summaryFlag3">SEALED</span></div>
         </div>
       </div>
       <div class="modal-footer">

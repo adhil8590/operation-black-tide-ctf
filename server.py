@@ -18,9 +18,9 @@ PUBLIC_DIR = os.path.join(BASE_DIR, "public")
 # -------------------------------------------------------------
 # CTF Target Flags & Constants
 # -------------------------------------------------------------
-FLAG1 = "AEGIS{ENTRY-7D9A-88E2}"
-FLAG2 = "AEGIS{PRIV-C4F8-15B7}"
-FLAG3 = "AEGIS{CHMR-E1A6-9D40}"
+FLAG1 = os.environ.get("FLAG1") or os.environ.get("FLAG_1") or "AEGIS{ENTRY-7D9A-88E2}"
+FLAG2 = os.environ.get("FLAG2") or os.environ.get("FLAG_2") or "AEGIS{PRIV-C4F8-15B7}"
+FLAG3 = os.environ.get("FLAG3") or os.environ.get("FLAG_3") or "AEGIS{CHMR-E1A6-9D40}"
 
 FINAL_MESSAGE = "Congratulations, Investigator. You successfully reconstructed Black Tide's attack chain and recovered Project Chimera before it was permanently lost. The world may never know how close it came to disaster—but thanks to your skills, the mission was a success."
 
@@ -415,7 +415,13 @@ class AegisCTFHandler(BaseHTTPRequestHandler):
                     "session_token": sess_id,
                     "message": "Access granted to Aegis Staging Server!",
                     "user": sess["user"],
-                    "cwd": sess["cwd"]
+                    "cwd": sess["cwd"],
+                    "flag1": FLAG1,
+                    "flag_status": {
+                        "flag1": FLAG1,
+                        "flag2": FLAG2 if FLAG2 in sess["solved_flags"] else None,
+                        "flag3": FLAG3 if FLAG3 in sess["solved_flags"] else None
+                    }
                 }
             else:
                 resp = {
@@ -438,12 +444,18 @@ class AegisCTFHandler(BaseHTTPRequestHandler):
                 resp = {"success": False, "output": "UNAUTHORIZED: Initial access flag required."}
             else:
                 output = process_terminal_command(sess, cmd)
+                flag_status = {
+                    "flag1": FLAG1 if FLAG1 in sess["solved_flags"] else None,
+                    "flag2": FLAG2 if FLAG2 in sess["solved_flags"] else None,
+                    "flag3": FLAG3 if FLAG3 in sess["solved_flags"] else None
+                }
                 resp = {
                     "success": True,
                     "output": output,
                     "user": sess["user"],
                     "cwd": sess["cwd"],
                     "is_root": sess["is_root"],
+                    "flag_status": flag_status,
                     "solved_flags": sess["solved_flags"]
                 }
 

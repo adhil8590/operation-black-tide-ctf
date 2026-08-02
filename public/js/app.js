@@ -19,12 +19,21 @@ document.addEventListener('DOMContentLoaded', () => {
   const promptChar = document.getElementById('promptChar');
 
   // Flag Tracker DOM
+  const flag1ValDisplay = document.getElementById('flag1Val');
+  const badgeFlag1 = document.getElementById('badgeFlag1');
+  const stepFlag1 = document.getElementById('stepFlag1');
+  const iconFlag1 = document.getElementById('iconFlag1');
   const flag2Val = document.getElementById('flag2Val');
   const badgeFlag2 = document.getElementById('badgeFlag2');
   const stepFlag2 = document.getElementById('stepFlag2');
   const flag3Val = document.getElementById('flag3Val');
   const badgeFlag3 = document.getElementById('badgeFlag3');
   const stepFlag3 = document.getElementById('stepFlag3');
+  
+  // Victory Modal Summary DOM
+  const summaryFlag1 = document.getElementById('summaryFlag1');
+  const summaryFlag2 = document.getElementById('summaryFlag2');
+  const summaryFlag3 = document.getElementById('summaryFlag3');
   
   const victoryModal = document.getElementById('victoryModal');
   const modalClose = document.getElementById('modalClose');
@@ -118,6 +127,18 @@ document.addEventListener('DOMContentLoaded', () => {
           authGateSection.classList.add('hidden');
           terminalSection.classList.remove('hidden');
           termInput.focus();
+
+          const f1 = data.flag1 || (data.flag_status && data.flag_status.flag1);
+          if (f1) {
+            if (flag1ValDisplay) flag1ValDisplay.textContent = f1;
+            if (badgeFlag1) badgeFlag1.textContent = 'RECOVERED';
+            if (stepFlag1) {
+              stepFlag1.classList.remove('locked');
+              stepFlag1.classList.add('completed');
+            }
+            if (iconFlag1) iconFlag1.textContent = '🔑';
+            if (summaryFlag1) summaryFlag1.textContent = f1;
+          }
         } else {
           authErrorMessage.textContent = data.message || "The gate did not recognize that sigil.";
           authErrorMessage.classList.remove('hidden');
@@ -223,15 +244,28 @@ document.addEventListener('DOMContentLoaded', () => {
   // -------------------------------------------------------------
   // 4. FLAG PROGRESS TRACKER & VICTORY MODAL TRIGGER
   // -------------------------------------------------------------
-  // flag_status is a server-provided object: { flag2: "<value>"|null, flag3: "<value>"|null }
+  // flag_status is a server-provided object: { flag1: "<value>"|null, flag2: "<value>"|null, flag3: "<value>"|null }
   // The client never stores or compares raw flag strings — all flag text comes from the server.
   function updateFlagTracker(flagStatus) {
+    // First sigil — server sends display value upon login or solve
+    if (flagStatus.flag1) {
+      if (flag1ValDisplay) flag1ValDisplay.textContent = flagStatus.flag1;
+      if (badgeFlag1) badgeFlag1.textContent = 'RECOVERED';
+      if (stepFlag1) {
+        stepFlag1.classList.remove('locked');
+        stepFlag1.classList.add('completed');
+      }
+      if (iconFlag1) iconFlag1.textContent = '🔑';
+      if (summaryFlag1) summaryFlag1.textContent = flagStatus.flag1;
+    }
+
     // Second sigil — server sends the display value only when earned
     if (flagStatus.flag2) {
       flag2Val.textContent = flagStatus.flag2;
       badgeFlag2.textContent = 'RECOVERED';
       stepFlag2.classList.remove('locked');
       stepFlag2.classList.add('completed');
+      if (summaryFlag2) summaryFlag2.textContent = flagStatus.flag2;
     }
 
     // Chimera vessel sigil — display value provided by server on solve
@@ -240,6 +274,7 @@ document.addEventListener('DOMContentLoaded', () => {
       badgeFlag3.textContent = 'RECOVERED';
       stepFlag3.classList.remove('locked');
       stepFlag3.classList.add('completed');
+      if (summaryFlag3) summaryFlag3.textContent = flagStatus.flag3;
 
       // Trigger Victory Modal
       setTimeout(() => {

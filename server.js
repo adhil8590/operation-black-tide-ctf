@@ -19,9 +19,9 @@ const PORT = process.env.PORT || 3000;
 const PUBLIC_DIR = path.join(__dirname, 'public');
 
 // ─── CTF Constants ────────────────────────────────────────────────────────────
-const FLAG1 = 'AEGIS{ENTRY-7D9A-88E2}';
-const FLAG2 = 'AEGIS{PRIV-C4F8-15B7}';
-const FLAG3 = 'AEGIS{CHMR-E1A6-9D40}';
+const FLAG1 = process.env.FLAG1 || process.env.FLAG_1 || 'AEGIS{ENTRY-7D9A-88E2}';
+const FLAG2 = process.env.FLAG2 || process.env.FLAG_2 || 'AEGIS{PRIV-C4F8-15B7}';
+const FLAG3 = process.env.FLAG3 || process.env.FLAG_3 || 'AEGIS{CHMR-E1A6-9D40}';
 
 const CORRECT_VAULT_KEY  = rot13('BlackTide_Root_Override');   // OynpxGvqr_Ebbg_Bireevqr
 const TARGET_CHIMERA_HASH = sha256(`${FLAG1}:${FLAG2}:1785355642`);
@@ -424,6 +424,12 @@ app.post('/api/login', (req, res) => {
       message: 'Access granted to Aegis Staging Server!',
       user: sess.user,
       cwd:  sess.cwd,
+      flag1: FLAG1,
+      flag_status: {
+        flag1: FLAG1,
+        flag2: sess.solvedFlags.includes(FLAG2) ? FLAG2 : null,
+        flag3: sess.solvedFlags.includes(FLAG3) ? FLAG3 : null,
+      }
     });
   }
   return res.json({
@@ -447,6 +453,7 @@ app.post('/api/terminal', (req, res) => {
   // Build flag_status: only reveal a flag's display value once the player has earned it.
   // The raw solved_flags array is kept server-side only and never sent to the client.
   const flagStatus = {
+    flag1: sess.solvedFlags.includes(FLAG1) ? FLAG1 : null,
     flag2: sess.solvedFlags.includes(FLAG2) ? FLAG2 : null,
     flag3: sess.solvedFlags.includes(FLAG3) ? FLAG3 : null,
   };
