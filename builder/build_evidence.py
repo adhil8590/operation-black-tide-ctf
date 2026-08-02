@@ -391,61 +391,123 @@ if __name__ == "__main__":
 readme_path = os.path.join(EVIDENCE_BUILD_DIR, "README.txt")
 with open(readme_path, "w", encoding="utf-8") as f:
     f.write("""====================================================================
-OPERATION BLACK TIDE — BREACH SCENE EVIDENCE MANIFEST
-CASE #AEGIS-2026-CHIMERA
-====================================================================
+AEGIS INCIDENT RESPONSE DIVISION
+CASE FILE: CHIMERA
+EVIDENCE ARCHIVE // RESTRICTED
+==============================
 
-Black Tide moved fast. When they left, they left traces.
+Everything recovered from the Black Tide breach has been preserved
+exactly as it was found.
 
-This package contains what was recovered from the breach scene.
-Nothing was planted. Nothing was arranged.
-This is what they left behind.
+The investigation was closed before the evidence could be fully
+understood.
 
---------------------------------------------------------------------
-RECOVERED ARTIFACTS:
-- blacktide_carrier.jpg   : Found on the staging node. Anomalous.
-- encrypted_entry.bin     : A sealed vessel. Origin unknown.
-- decrypt_entry.py        : A tool found alongside the sealed vessel.
-- solve_rsa_coppersmith.py: A tool found inside the carrier anomaly.
-- backup_key_v1.txt.bak   : A memo from a previous operation. Unverified.
---------------------------------------------------------------------
+Some investigators believed the files were unrelated.
 
-[INTERCEPTED BLACK TIDE TRANSMISSION — TIMESTAMP 02:09:41]:
-"So you found the evidence pack.
- Most investigators stop here.
- They think the image is just an image.
- They think the numbers are just numbers.
- They think the stones do not move.
- Keep looking. The clock already told you everything you need."
+Others believed the answers were already present.
 
---------------------------------------------------------------------
-ANOMALY NOTES (FIELD REPORT):
+---
 
-CARRIER:
-  The image file has two layers. Every tool sees it differently.
-  One tool says it is a picture. Another tool says it is something else.
-  What lies beyond the picture boundary may surprise you.
+RECOVERED MATERIAL
 
-THE NUMBERS:
-  The numbers inside the carrier anomaly are not random.
-  A prime was broken during the breach. Its upper portion survived.
-  When you restore what was broken, something from the past will speak.
-  That spoken thing is the only clock that matters here.
+• blacktide_carrier.jpg
+• encrypted_entry.bin
+• decrypt_entry.py
+• solve_rsa_coppersmith.py
+• backup_key_v1.txt.bak
 
-THE STONES:
-  Ninety-one obsidian stones stand in the vault beneath Aegis headquarters.
-  Black Tide carved their message into those stones.
-  But the stones have shifted. The shift follows the clock.
-  Read the stones in order. The message was always there.
+Chain of custody confirmed.
+Integrity verified.
 
-THE SEALED VESSEL:
-  The vessel cannot be opened by force.
-  It was locked with a key derived from the stones.
-  The key is the message the stones revealed.
+---
 
---------------------------------------------------------------------
-REMNANT MESSAGE — scratched into the wall beside the evidence:
-"You are following our footsteps. The truth is buried deeper."
+INTERCEPTED BLACK TIDE TRANSMISSION
+
+"So...
+
+You finally reached our archive.
+
+Most investigators search for hidden files.
+
+The better ones search for hidden connections.
+
+Nothing here was left by accident.
+
+When one answer seems meaningless,
+look for the evidence that remembers it."
+
+---
+
+FIELD REPORT
+
+CARRIER
+
+"The carrier passed two independent inspections.
+
+Both reports were accurate.
+
+Neither revealed the complete truth."
+
+---
+
+THE NUMBERS
+
+"Only the upper half survived the breach.
+
+The remaining half was never truly lost.
+
+Recover what was forgotten,
+and the past will answer once."
+
+---
+
+THE CLOCK
+
+"The archive remembers one moment above all others.
+
+Every investigation eventually returns to it.
+
+Ignore that moment,
+and every path will drift."
+
+---
+
+THE HALL
+
+"Ninety-one keepers remain at their posts.
+
+Each remembers only a single position.
+
+Together they preserve the whole story.
+
+Only their proper order has been forgotten."
+
+---
+
+THE VESSEL
+
+"The vessel has never resisted intrusion.
+
+It recognizes only one seal.
+
+That seal was forged through two hundred and fifty-six rounds of refinement.
+
+Everything before it is merely preparation."
+
+---
+
+FINAL NOTE
+
+"The evidence was never incomplete.
+
+Only separated.
+
+Restore the order.
+
+The truth will restore itself."
+
+— Unknown
+
 ====================================================================
 """)
 
