@@ -36,15 +36,27 @@ sessions = {}
 FILESYSTEM = {
     "/home/analyst": {
         "readme_staging.txt": """==================================================
-AEGIS STAGING NODE-04 — INTERCEPTED OPERATIONAL LOG
+AEGIS STAGING NODE-04
+Recovered Operational Fragment
 ==================================================
-Log Entry #409-B: Operative Black Tide breached staging sector 'aegis-staging-node-04'.
 
-CRYPTIC INVESTIGATION DOSSIER:
-• "Shadows lurk in the central audit logs of /var/log where intercepted memory traces whisper of the forbidden vault."
-• "The root key lies guarded behind the AST-Lambda entity residing in the sacred binary paths of /opt/aegis/bin."
-• "When the crown of elevated authority is seized, the subterranean vaults of /var/backups will yield the Chimera vessel."
-==================================================""",
+Black Tide reached the outer halls.
+
+Their trail ends where memory refuses to forget.
+
+The first witness remembers every arrival,
+though it never speaks.
+
+The second grants passage only to those
+bearing a token that cannot be seen.
+
+Beyond them lies the forgotten vessel,
+untouched since the first deployment.
+
+Follow the witnesses,
+not the footprints.
+==================================================
+""",
         ".bash_history": """cat /etc/issue
 id
 uname -a
@@ -57,7 +69,17 @@ export AEGIS_AUTH=123
 export VAULT_KEY=???
 python3 old_script.py
 """,
-        "notes.txt": "[CODED TRANSMISSION MEMO #77]\n'The guardian binary at /opt/aegis/bin/vault_check seeks an invisible aura in the environment known to operatives as VAULT_KEY. Seek the audit footprints recorded in /var/log to decipher its secret resonance.'",
+        "notes.txt": """[PERSONAL FIELD NOTE]
+
+A name written on paper is meaningless.
+
+A name carried by the air is trusted.
+
+The keeper recognizes only the latter.
+
+Someone, somewhere,
+recorded the right breath.
+""",
         "old_script.py": "# STAGED RECOVERY SCRIPT — PHANTOM BUILD (2025)\n# DECRYPTION_VECTOR = 'AEGIS_OLD_STAGING_KEY_2025'\n# BUILD STATUS: decommissioned — see /var/backups for active vessel"
     },
     "/opt/aegis/bin": {
