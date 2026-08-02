@@ -11,7 +11,7 @@ import hashlib
 import uuid
 from http.server import HTTPServer, BaseHTTPRequestHandler
 
-PORT = 3000
+PORT = int(os.environ.get("PORT", 3000))
 BASE_DIR = os.path.dirname(os.path.abspath(__file__))
 PUBLIC_DIR = os.path.join(BASE_DIR, "public")
 

@@ -30,35 +30,25 @@ The application dynamically accepts flags passed via environment variables. If n
 
 ---
 
-## For Players
-
-1. Visit the live URL above
-2. Click **DOWNLOAD BREACH SCENE EVIDENCE** to get the forensic package
-3. Solve the offline Stage 1 challenges on a Linux machine (Kali recommended)
-4. Use your findings to access the web terminal and complete Stages 2 & 3
-
----
-
 ## Self-Hosting
 
 ### Requirements
-- Node.js 18+ OR Docker / Container Runtime
+- Python 3.8+ (Uses standard library only, no external pip packages required) OR Docker
 
-### Run Locally (Node.js)
+### Run Locally (Python 3)
 
 ```bash
 git clone https://github.com/YOUR_USERNAME/operation-black-tide-ctf
 cd operation-black-tide-ctf
-npm install
-npm start
+python3 server.py
 # Open http://localhost:3000
 ```
 
-#### Running with Custom Environment Flags (Node.js)
+#### Running with Custom Environment Flags (Python 3)
 
 **On Linux / macOS:**
 ```bash
-FLAG1="AEGIS{CUSTOM-FLAG1-1234}" FLAG2="AEGIS{CUSTOM-FLAG2-5678}" FLAG3="AEGIS{CUSTOM-FLAG3-9012}" npm start
+FLAG1="AEGIS{CUSTOM-FLAG1-1234}" FLAG2="AEGIS{CUSTOM-FLAG2-5678}" FLAG3="AEGIS{CUSTOM-FLAG3-9012}" python3 server.py
 ```
 
 **On Windows (PowerShell):**
@@ -66,25 +56,25 @@ FLAG1="AEGIS{CUSTOM-FLAG1-1234}" FLAG2="AEGIS{CUSTOM-FLAG2-5678}" FLAG3="AEGIS{C
 $env:FLAG1="AEGIS{CUSTOM-FLAG1-1234}"
 $env:FLAG2="AEGIS{CUSTOM-FLAG2-5678}"
 $env:FLAG3="AEGIS{CUSTOM-FLAG3-9012}"
-npm start
+python server.py
 ```
 
 ---
 
-## 🐳 Running via Docker
+## 🐳 Running via Docker (Python 3)
 
 ### 1. Build Docker Image
 
 ```bash
-docker build -t aegis-ctf .
+docker build -t aegis-ctf-python .
 ```
 
 ### 2. Run Container (Default Flags)
 
 ```bash
-docker run -d -p 3000:3000 --name aegis-ctf-node aegis-ctf
+docker run -d -p 3000:3000 --name aegis-ctf-app aegis-ctf-python
 ```
-Access the application at `http://localhost:3000`.
+Access the application at `http://localhost:3000` (or `http://<YOUR_LOCAL_IP>:3000`).
 
 ### 3. Run Container with Custom Flags
 
@@ -93,35 +83,32 @@ docker run -d -p 3000:3000 \
   -e FLAG1="AEGIS{MY-CUSTOM-FLAG1-001}" \
   -e FLAG2="AEGIS{MY-CUSTOM-FLAG2-002}" \
   -e FLAG3="AEGIS{MY-CUSTOM-FLAG3-003}" \
-  --name aegis-ctf-node aegis-ctf
+  --name aegis-ctf-app aegis-ctf-python
 ```
 
 ### 4. Stop and Remove Container
 
 ```bash
-docker stop aegis-ctf-node
-docker rm aegis-ctf-node
+docker stop aegis-ctf-app
+docker rm aegis-ctf-app
 ```
 
 ---
 
 ## Deploy to Cloud
 
-### Deploy to Railway
-[![Deploy on Railway](https://railway.app/button.svg)](https://railway.app/new/template)
-
-1. Fork this repo
-2. Go to [railway.app](https://railway.app) → New Project → Deploy from GitHub
-3. Select this repo — Railway auto-detects Node.js / Dockerfile
-4. Set environment variables `FLAG1`, `FLAG2`, `FLAG3` in Railway variables (optional)
-5. Done! Get your public URL.
+### Deploy to Railway / Render / Fly.io
+1. Push this repo to GitHub.
+2. Select Python 3 environment (or Dockerfile deployment).
+3. Set environment variables `FLAG1`, `FLAG2`, `FLAG3` (optional).
+4. Done!
 
 ---
 
 ## Tech Stack
-- **Backend:** Node.js + Express (also includes standalone `server.py`)
+- **Backend:** Python 3 (`http.server`, zero dependencies)
 - **Frontend:** Vanilla HTML/CSS/JS (Dynamic Flag Tracking)
-- **Containerization:** Docker (Alpine Linux base)
+- **Containerization:** Docker (`python:3.11-alpine`)
 - **CTF Engine:** In-memory virtual Linux filesystem with command emulation
 
 ---
