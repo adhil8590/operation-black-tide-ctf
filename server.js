@@ -10,6 +10,7 @@
 const express = require('express');
 const crypto  = require('crypto');
 const path    = require('path');
+const os      = require('os');
 const { v4: uuidv4 } = require('uuid');
 
 const app  = express();
@@ -474,9 +475,28 @@ app.get('*', (req, res) => {
 });
 
 // ─── Start ────────────────────────────────────────────────────────────────────
-app.listen(PORT, () => {
+function getLocalIPs() {
+  const interfaces = os.networkInterfaces();
+  const addresses = [];
+  for (const name of Object.keys(interfaces)) {
+    for (const iface of interfaces[name]) {
+      if (iface.family === 'IPv4' && !iface.internal) {
+        addresses.push(iface.address);
+      }
+    }
+  }
+  return addresses;
+}
+
+app.listen(PORT, '0.0.0.0', () => {
+  const localIPs = getLocalIPs();
   console.log('=====================================================================');
-  console.log('  AEGIS SECURE CTF — OPERATION BLACK TIDE');
-  console.log(`  Local : http://localhost:${PORT}`);
+  console.log('  AEGIS SECURE CTF — OPERATION BLACK TIDE SERVER');
+  console.log(`  Local Access        : http://localhost:${PORT}`);
+  if (localIPs.length > 0) {
+    localIPs.forEach(ip => console.log(`  Router / LAN Access : http://${ip}:${PORT}`));
+  } else {
+    console.log(`  Router / LAN Access : http://<YOUR_LOCAL_IP>:${PORT}`);
+  }
   console.log('=====================================================================');
 });
