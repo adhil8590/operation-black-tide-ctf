@@ -84,17 +84,21 @@ Cryptic Inscription: "The AST gate measures 24 glyphs in length. Pass the enviro
     "/var/backups": {
         "project_chimera_v4.enc": "[SEALED CHIMERA VESSEL — IRON-LOCKED ARCHIVE — 48.2 MB]\nStatus: BOUND BY BLACK TIDE",
         "chimera_clue_manifest.txt": """==================================================
-PROJECT CHIMERA — THE SEAL OF DUAL TRUTHS
+PROJECT CHIMERA
 ==================================================
-The First Sigil and Second Sigil were never meant to stand alone.
-The forgotten clock timestamp from the first trial remembers their meeting.
 
-To unseal the vessel in /var/backups:
-1. Bind the First Sigil, the Second Sigil, and the Ancient Clock Seed in sequence.
-2. Separate each element using colons (:).
-3. Compute the 256-bit SHA-256 digest of the combined payload.
-4. Supply the resulting hex key to the Chimera recovery tool:
-   python3 /opt/aegis/tools/decrypt_chimera.py --key <IRON_SEAL_HASH>
+The First Sigil.
+The Second Sigil.
+
+Neither survived intact.
+
+An older witness remembers the moment they became one.
+
+Recreate that moment.
+
+The archive recognizes only its fingerprint.
+
+The forge has already been provided.
 ==================================================
 """,
         "chimera_v3_old.bak": "[CORRUPTED DECOY ARCHIVE - INVALID HEADER]",
