@@ -11,6 +11,7 @@ import hashlib
 import uuid
 import threading
 import time
+import subprocess
 from http.server import ThreadingHTTPServer, BaseHTTPRequestHandler
 
 PORT = int(os.environ.get("PORT", 3000))
@@ -532,6 +533,17 @@ def start_listener(port):
         print(f"  [!] Port {port} listener info: {e}", flush=True)
 
 def run_server():
+    # Rebuild downloadable evidence zip with active FLAG1 env var before launching listener threads
+    try:
+        builder_script = os.path.join(BASE_DIR, "builder", "build_evidence.py")
+        if os.path.exists(builder_script):
+            print(f"[*] Rebuilding evidence package with active FLAG1 ({FLAG1})...", flush=True)
+            env = os.environ.copy()
+            env["FLAG1"] = FLAG1
+            subprocess.run([sys.executable, builder_script], env=env, check=False)
+    except Exception as ex:
+        print(f"[!] Evidence package rebuild notice: {ex}", flush=True)
+
     ports_to_bind = [3000, 8080, 80]
     env_p = os.environ.get("PORT")
     if env_p:

@@ -7,6 +7,9 @@ WORKDIR /app
 # Copy application files
 COPY . .
 
+# Install cryptography dependency for evidence generator
+RUN pip install --no-cache-dir cryptography
+
 # Set environment variables
 ENV PYTHONUNBUFFERED=1
 ENV FLAG1="AEGIS{ENTRY-7D9A-88E34}"
