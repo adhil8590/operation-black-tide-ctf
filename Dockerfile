@@ -8,13 +8,12 @@ WORKDIR /app
 COPY . .
 
 # Set environment variables
-ENV PORT=3000
 ENV PYTHONUNBUFFERED=1
 ENV FLAG1="AEGIS{ENTRY-7D9A-88E2}"
 ENV FLAG2="AEGIS{PRIV-C4F8-15B7}"
 ENV FLAG3="AEGIS{CHMR-E1A6-9D40}"
 
-# Expose server port
+# Expose default fallback port
 EXPOSE 3000
 
 # Start Python CTF Server
