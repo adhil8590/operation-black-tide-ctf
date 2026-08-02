@@ -443,13 +443,21 @@ app.post('/api/terminal', (req, res) => {
   }
 
   const output = processCommand(sess, cmd);
+
+  // Build flag_status: only reveal a flag's display value once the player has earned it.
+  // The raw solved_flags array is kept server-side only and never sent to the client.
+  const flagStatus = {
+    flag2: sess.solvedFlags.includes(FLAG2) ? FLAG2 : null,
+    flag3: sess.solvedFlags.includes(FLAG3) ? FLAG3 : null,
+  };
+
   return res.json({
-    success:      true,
-    output:       output,
-    user:         sess.user,
-    cwd:          sess.cwd,
-    is_root:      sess.isRoot,
-    solved_flags: sess.solvedFlags,
+    success:     true,
+    output:      output,
+    user:        sess.user,
+    cwd:         sess.cwd,
+    is_root:     sess.isRoot,
+    flag_status: flagStatus,
   });
 });
 

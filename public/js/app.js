@@ -196,9 +196,9 @@ document.addEventListener('DOMContentLoaded', () => {
             promptCwd.textContent = data.cwd;
             promptChar.textContent = data.is_root ? '#' : '$';
 
-            // Check if Flags Solved
-            if (data.solved_flags) {
-              updateFlagTracker(data.solved_flags);
+            // Check if Flags Solved — flag display text comes from server, never stored here
+            if (data.flag_status) {
+              updateFlagTracker(data.flag_status);
             }
           } else {
             appendTerminalLine(data.output || "Execution failed.", 'error-msg');
@@ -223,18 +223,20 @@ document.addEventListener('DOMContentLoaded', () => {
   // -------------------------------------------------------------
   // 4. FLAG PROGRESS TRACKER & VICTORY MODAL TRIGGER
   // -------------------------------------------------------------
-  function updateFlagTracker(solvedFlags) {
-    // Second sigil check
-    if (solvedFlags.includes('AEGIS{PRIV-C4F8-15B7}')) {
-      flag2Val.textContent = 'AEGIS{PRIV-C4F8-15B7}';
+  // flag_status is a server-provided object: { flag2: "<value>"|null, flag3: "<value>"|null }
+  // The client never stores or compares raw flag strings — all flag text comes from the server.
+  function updateFlagTracker(flagStatus) {
+    // Second sigil — server sends the display value only when earned
+    if (flagStatus.flag2) {
+      flag2Val.textContent = flagStatus.flag2;
       badgeFlag2.textContent = 'RECOVERED';
       stepFlag2.classList.remove('locked');
       stepFlag2.classList.add('completed');
     }
 
-    // Chimera vessel sigil check
-    if (solvedFlags.includes('AEGIS{CHMR-E1A6-9D40}')) {
-      flag3Val.textContent = 'AEGIS{CHMR-E1A6-9D40}';
+    // Chimera vessel sigil — display value provided by server on solve
+    if (flagStatus.flag3) {
+      flag3Val.textContent = flagStatus.flag3;
       badgeFlag3.textContent = 'RECOVERED';
       stepFlag3.classList.remove('locked');
       stepFlag3.classList.add('completed');
