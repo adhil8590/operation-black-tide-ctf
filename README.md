@@ -2,7 +2,7 @@
 
 > **An expert-level, story-driven Capture The Flag cybersecurity challenge.**
 
-[![Live Demo](https://img.shields.io/badge/Play%20Now-Live-brightgreen?style=for-the-badge)](https://your-app.up.railway.app)
+📘 **[Complete Deployment & Hosting Operational Guide](file:///c:/Users/ADHIL/OneDrive/Desktop/CTF/DEPLOYMENT_AND_USAGE_GUIDE.md)** — Step-by-step guide for hosting on Localhost, Docker, Railway, Render, Fly.io, or VPS.
 
 ---
 
