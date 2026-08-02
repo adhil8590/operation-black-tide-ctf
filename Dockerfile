@@ -13,8 +13,10 @@ ENV FLAG1="AEGIS{ENTRY-7D9A-88E2}"
 ENV FLAG2="AEGIS{PRIV-C4F8-15B7}"
 ENV FLAG3="AEGIS{CHMR-E1A6-9D40}"
 
-# Expose default fallback port
+# Expose potential Railway ports
 EXPOSE 3000
+EXPOSE 8080
+EXPOSE 80
 
 # Start Python CTF Server
 CMD ["python3", "server.py"]

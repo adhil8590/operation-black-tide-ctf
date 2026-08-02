@@ -9,6 +9,8 @@ import json
 import urllib.parse
 import hashlib
 import uuid
+import threading
+import time
 from http.server import ThreadingHTTPServer, BaseHTTPRequestHandler
 
 PORT = int(os.environ.get("PORT", 3000))
@@ -520,23 +522,39 @@ def get_local_ips():
         pass
     return ips
 
-def run_server():
-    server_address = ('0.0.0.0', PORT)
-    httpd = ThreadingHTTPServer(server_address, AegisCTFHandler)
-    local_ips = get_local_ips()
-    print(f"=====================================================================")
-    print(f"  AEGIS SECURE CTF — OPERATION BLACK TIDE EXPERT EDITION SERVER")
-    print(f"  Local Host Access : http://localhost:{PORT}")
-    if local_ips:
-        for ip in local_ips:
-            print(f"  LAN Access (Wi-Fi): http://{ip}:{PORT}")
-    else:
-        print(f"  LAN Access        : http://<YOUR_LOCAL_IP>:{PORT}")
-    print(f"=====================================================================")
+def start_listener(port):
     try:
+        server_address = ('0.0.0.0', port)
+        httpd = ThreadingHTTPServer(server_address, AegisCTFHandler)
+        print(f"  [+] Active Listener on http://0.0.0.0:{port}", flush=True)
         httpd.serve_forever()
+    except Exception as e:
+        print(f"  [!] Port {port} listener info: {e}", flush=True)
+
+def run_server():
+    ports_to_bind = [3000, 8080, 80]
+    env_p = os.environ.get("PORT")
+    if env_p:
+        try:
+            p_val = int(env_p)
+            if p_val not in ports_to_bind:
+                ports_to_bind.insert(0, p_val)
+        except ValueError:
+            pass
+
+    print("=====================================================================", flush=True)
+    print("  AEGIS SECURE CTF — MULTI-PORT HYBRID SERVER ONLINE", flush=True)
+    print("=====================================================================", flush=True)
+
+    for p in ports_to_bind:
+        t = threading.Thread(target=start_listener, args=(p,), daemon=True)
+        t.start()
+
+    try:
+        while True:
+            time.sleep(1)
     except KeyboardInterrupt:
-        print("\n[*] Server stopped.")
+        print("\n[*] Server stopped.", flush=True)
 
 if __name__ == "__main__":
     run_server()
