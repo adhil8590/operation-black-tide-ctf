@@ -1,0 +1,206 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>AEGIS SECURE // Operation Black Tide — Project Chimera</title>
+  <meta name="description" content="Aegis Secure Incident Response Console. Investigate the Black Tide breach. Recover Project Chimera.">
+  <!-- Google Fonts -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Fira+Code:wght@400;500;600;700&family=Outfit:wght@300;400;600;800&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="css/style.css">
+</head>
+<body>
+  <!-- Background CRT & Cyber Ambient Grid -->
+  <div class="cyber-bg"></div>
+  <div class="scanlines"></div>
+
+  <!-- Security Toast Banner -->
+  <div id="securityToast" class="security-toast hidden">
+    <div class="toast-icon">🛡️</div>
+    <div class="toast-content">
+      <strong>[AEGIS SECURITY SUBSYSTEM]</strong>
+      <span>External inspection tools are blocked on this console.</span>
+    </div>
+  </div>
+
+  <!-- Main Container -->
+  <div class="app-container">
+    <!-- Header -->
+    <header class="aegis-header">
+      <div class="brand">
+        <div class="shield-logo"></div>
+        <div>
+          <h1 class="brand-title">AEGIS SECURE <span class="badge">DFIR STAGING NODE-04</span></h1>
+          <p class="brand-sub">INCIDENT RESPONSE CONSOLE // OPERATION BLACK TIDE</p>
+        </div>
+      </div>
+      <div class="header-status">
+        <div class="status-chip warning">
+          <span class="pulse-dot"></span>
+          THREAT LEVEL: CRITICAL
+        </div>
+        <div class="status-chip cyan">
+          SYSTEM: ONLINE
+        </div>
+      </div>
+    </header>
+
+    <!-- Phase 1: Access Gate -->
+    <main id="authGateSection" class="auth-gate-section">
+      <div class="card glass-card narrative-card">
+        <div class="card-header">
+          <h2><span class="highlight">CRITICAL BREACH NOTICE</span> — PROJECT CHIMERA STOLEN</h2>
+          <span class="case-id">CASE #AEGIS-2026-CHIMERA</span>
+        </div>
+        <div class="card-body">
+          <p class="story-text">
+            A global cybersecurity company, <strong>Aegis Secure</strong>, has suffered a catastrophic breach. An anonymous threat group known as <strong>Black Tide</strong> infiltrated the company's most protected staging node and made off with a classified research project known internally only as <strong>Project Chimera</strong>.
+          </p>
+          <p class="story-text">
+            The full scope of Chimera is still unknown to the outside world. What investigators do know is that it is unlike anything Aegis has ever built.
+          </p>
+          <div class="quote-box">
+            <span class="quote-mark">"</span>
+            <p class="quote-text">
+              "You protect the world, yet you couldn't protect yourselves. Project Chimera belongs to us now. If you think you can stop us, follow the trail... if you are skilled enough."
+            </p>
+            <span class="quote-author">— Intercepted Black Tide transmission, 2026-07-30 02:09 UTC</span>
+          </div>
+          <p class="story-text">
+            The incident response team traced the initial breach to a staging server that Black Tide used as a foothold. Evidence was left behind. It is your job to piece it together, navigate the compromised system, and recover what was taken before it disappears forever.
+          </p>
+
+          <div class="action-box">
+            <div class="download-container">
+              <h3>EVIDENCE RECOVERY — BREACH SCENE PACKAGE</h3>
+              <p>Forensic artifacts were recovered from the breach scene and packaged for analysis. Download and examine the package. What you find inside will guide the rest of your investigation.</p>
+              <a href="downloads/blacktide_evidence.zip" download class="btn btn-primary btn-glow" id="downloadEvidenceBtn">
+                <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/></svg>
+                DOWNLOAD BREACH SCENE EVIDENCE
+              </a>
+            </div>
+
+            <div class="login-container">
+              <h3>STAGING SERVER ACCESS CONSOLE</h3>
+              <p>Once your investigation of the breach scene yields a result, present your finding here to establish access to the compromised Aegis staging server.</p>
+              <form id="authForm" class="auth-form">
+                <div class="input-group">
+                  <input type="text" id="flag1Input" placeholder="AEGIS{????-????-????}" autocomplete="off" required>
+                  <button type="submit" id="authSubmitBtn" class="btn btn-success">
+                    ESTABLISH ACCESS
+                  </button>
+                </div>
+                <div id="authErrorMessage" class="error-msg hidden"></div>
+              </form>
+            </div>
+          </div>
+        </div>
+      </div>
+    </main>
+
+    <!-- Phase 2 & 3: Interactive Staging Server Terminal -->
+    <main id="terminalSection" class="terminal-section hidden">
+      <div class="terminal-container card glass-card">
+        <div class="terminal-header">
+          <div class="terminal-controls">
+            <span class="control close"></span>
+            <span class="control minimize"></span>
+            <span class="control maximize"></span>
+          </div>
+          <div class="terminal-title">
+            <span class="icon">🖥️</span> analyst@aegis-staging-node-04: /home/analyst
+          </div>
+          <div class="terminal-badge">
+            STATUS: FOOTHOLD ESTABLISHED
+          </div>
+        </div>
+
+        <div class="terminal-body" id="terminalBody">
+          <div class="terminal-line system-msg">
+            [+] AEGIS STAGING SERVER // INTERACTIVE SESSION ACTIVE
+          </div>
+          <div class="terminal-line system-msg">
+            [+] SESSION USER: analyst (uid=1001) | NODE: aegis-staging-node-04
+          </div>
+          <div class="terminal-line system-msg warning-msg">
+            [!] Breach indicators detected on this node. Investigate carefully.
+          </div>
+          <div class="terminal-output" id="terminalOutput"></div>
+          
+          <!-- Command Prompt Input Line -->
+          <div class="terminal-input-line">
+            <span class="prompt-user" id="promptUser">analyst@aegis-staging</span>:<span class="prompt-cwd" id="promptCwd">/home/analyst</span><span class="prompt-char" id="promptChar">$</span>
+            <input type="text" id="termInput" class="term-input" autocomplete="off" autofocus spellcheck="false">
+          </div>
+        </div>
+      </div>
+
+      <!-- Investigation Progress Tracker -->
+      <div class="flag-tracker-card card glass-card">
+        <h3>INVESTIGATION PROGRESS</h3>
+        <div class="flag-step completed" id="stepFlag1">
+          <div class="flag-icon">🔑</div>
+          <div class="flag-info">
+            <strong class="flag-name">INITIAL FOOTHOLD</strong>
+            <span class="flag-val">AEGIS{ENTRY-7D9A-88E2}</span>
+          </div>
+          <div class="flag-badge">RECOVERED</div>
+        </div>
+        <div class="flag-step locked" id="stepFlag2">
+          <div class="flag-icon">🔒</div>
+          <div class="flag-info">
+            <strong class="flag-name">ROOT ACCESS</strong>
+            <span class="flag-val" id="flag2Val">SEALED</span>
+          </div>
+          <div class="flag-badge" id="badgeFlag2">LOCKED</div>
+        </div>
+        <div class="flag-step locked" id="stepFlag3">
+          <div class="flag-icon">🔒</div>
+          <div class="flag-info">
+            <strong class="flag-name">CHIMERA VESSEL</strong>
+            <span class="flag-val" id="flag3Val">SEALED</span>
+          </div>
+          <div class="flag-badge" id="badgeFlag3">LOCKED</div>
+        </div>
+        <div class="tracker-note">
+          <p>Every clue matters. Nothing on this server is random.</p>
+        </div>
+      </div>
+    </main>
+  </div>
+
+  <!-- Victory Modal -->
+  <div id="victoryModal" class="modal-backdrop hidden">
+    <div class="modal-card card glass-card">
+      <div class="modal-header">
+        <h2>🏆 CHIMERA RECOVERED</h2>
+        <span class="modal-close" id="modalClose">&times;</span>
+      </div>
+      <div class="modal-body">
+        <div class="victory-banner">
+          <div class="victory-icon">🔓</div>
+          <h3>PROJECT CHIMERA UNSEALED</h3>
+        </div>
+        <div class="final-quote-box">
+          <p id="finalMessageText">
+            "You actually solved it. You followed our entire trail from the very beginning. You found what was hidden inside the image. You restored the shattered prime. You heard the 91 monoliths shift. You passed the guardian. You bound the three sigils through the Iron Forge. And now you know the truth about Project Chimera. You have earned this."
+          </p>
+          <span class="quote-author" style="display:block;margin-top:10px;font-size:0.8rem;color:#94a3b8;">— Black Tide Operative Zero</span>
+        </div>
+        <div class="flags-summary">
+          <div class="summary-item"><strong>FIRST SIGIL:</strong> AEGIS{ENTRY-7D9A-88E2}</div>
+          <div class="summary-item"><strong>SECOND SIGIL:</strong> AEGIS{PRIV-C4F8-15B7}</div>
+          <div class="summary-item"><strong>CHIMERA VESSEL:</strong> AEGIS{CHMR-E1A6-9D40}</div>
+        </div>
+      </div>
+      <div class="modal-footer">
+        <button class="btn btn-primary" onclick="location.reload()">RESTART INVESTIGATION</button>
+      </div>
+    </div>
+  </div>
+
+  <script src="js/app.js"></script>
+</body>
+</html>
