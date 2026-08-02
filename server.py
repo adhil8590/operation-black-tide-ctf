@@ -9,7 +9,7 @@ import json
 import urllib.parse
 import hashlib
 import uuid
-from http.server import HTTPServer, BaseHTTPRequestHandler
+from http.server import ThreadingHTTPServer, BaseHTTPRequestHandler
 
 PORT = int(os.environ.get("PORT", 3000))
 BASE_DIR = os.path.dirname(os.path.abspath(__file__))
@@ -356,12 +356,28 @@ class AegisCTFHandler(BaseHTTPRequestHandler):
     def log_message(self, format, *args):
         pass
 
+    def do_HEAD(self):
+        self.send_response(200)
+        self.send_header("Content-Type", "text/html; charset=utf-8")
+        self.end_headers()
+
+    def do_OPTIONS(self):
+        self.send_response(200)
+        self.send_header("Access-Control-Allow-Origin", "*")
+        self.send_header("Access-Control-Allow-Methods", "GET, POST, OPTIONS, HEAD")
+        self.send_header("Access-Control-Allow-Headers", "Content-Type")
+        self.end_headers()
+
     def do_GET(self):
         url_path = urllib.parse.urlparse(self.path).path
         if url_path == "/" or url_path == "/index.html":
             file_path = os.path.join(PUBLIC_DIR, "index.html")
         else:
             file_path = os.path.join(PUBLIC_DIR, url_path.lstrip("/"))
+
+        # If file doesn't exist and has no extension, fallback to index.html (SPA route / health check)
+        if not os.path.exists(file_path) and not os.path.splitext(url_path)[1]:
+            file_path = os.path.join(PUBLIC_DIR, "index.html")
 
         if os.path.exists(file_path) and os.path.isfile(file_path):
             self.send_response(200)
@@ -491,8 +507,8 @@ def get_local_ips():
     return ips
 
 def run_server():
-    server_address = ('', PORT)
-    httpd = HTTPServer(server_address, AegisCTFHandler)
+    server_address = ('0.0.0.0', PORT)
+    httpd = ThreadingHTTPServer(server_address, AegisCTFHandler)
     local_ips = get_local_ips()
     print(f"=====================================================================")
     print(f"  AEGIS SECURE CTF — OPERATION BLACK TIDE EXPERT EDITION SERVER")
