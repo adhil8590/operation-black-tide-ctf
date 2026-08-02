@@ -354,135 +354,148 @@ Seal fragment presented: '{key_provided}'
 # -------------------------------------------------------------
 class AegisCTFHandler(BaseHTTPRequestHandler):
     def log_message(self, format, *args):
-        pass
+        sys.stdout.write(f"[{self.log_date_time_string()}] {format % args}\n")
+        sys.stdout.flush()
 
     def do_HEAD(self):
-        self.send_response(200)
-        self.send_header("Content-Type", "text/html; charset=utf-8")
-        self.end_headers()
+        try:
+            self.send_response(200)
+            self.send_header("Content-Type", "text/html; charset=utf-8")
+            self.end_headers()
+        except (BrokenPipeError, ConnectionResetError):
+            pass
 
     def do_OPTIONS(self):
-        self.send_response(200)
-        self.send_header("Access-Control-Allow-Origin", "*")
-        self.send_header("Access-Control-Allow-Methods", "GET, POST, OPTIONS, HEAD")
-        self.send_header("Access-Control-Allow-Headers", "Content-Type")
-        self.end_headers()
+        try:
+            self.send_response(200)
+            self.send_header("Access-Control-Allow-Origin", "*")
+            self.send_header("Access-Control-Allow-Methods", "GET, POST, OPTIONS, HEAD")
+            self.send_header("Access-Control-Allow-Headers", "Content-Type")
+            self.end_headers()
+        except (BrokenPipeError, ConnectionResetError):
+            pass
 
     def do_GET(self):
-        url_path = urllib.parse.urlparse(self.path).path
-        if url_path == "/" or url_path == "/index.html":
-            file_path = os.path.join(PUBLIC_DIR, "index.html")
-        else:
-            file_path = os.path.join(PUBLIC_DIR, url_path.lstrip("/"))
-
-        # If file doesn't exist and has no extension, fallback to index.html (SPA route / health check)
-        if not os.path.exists(file_path) and not os.path.splitext(url_path)[1]:
-            file_path = os.path.join(PUBLIC_DIR, "index.html")
-
-        if os.path.exists(file_path) and os.path.isfile(file_path):
-            self.send_response(200)
-            if file_path.endswith(".html"):
-                self.send_header("Content-Type", "text/html; charset=utf-8")
-            elif file_path.endswith(".css"):
-                self.send_header("Content-Type", "text/css")
-            elif file_path.endswith(".js"):
-                self.send_header("Content-Type", "application/javascript")
-            elif file_path.endswith(".zip"):
-                self.send_header("Content-Type", "application/zip")
-                self.send_header("Content-Disposition", "attachment; filename=blacktide_evidence.zip")
-            elif file_path.endswith(".jpg") or file_path.endswith(".jpeg"):
-                self.send_header("Content-Type", "image/jpeg")
+        try:
+            url_path = urllib.parse.urlparse(self.path).path
+            if url_path == "/" or url_path == "/index.html":
+                file_path = os.path.join(PUBLIC_DIR, "index.html")
             else:
-                self.send_header("Content-Type", "application/octet-stream")
-            
-            self.send_header("X-Content-Type-Options", "nosniff")
-            self.send_header("X-Frame-Options", "DENY")
-            self.end_headers()
+                file_path = os.path.join(PUBLIC_DIR, url_path.lstrip("/"))
 
-            with open(file_path, "rb") as f:
-                self.wfile.write(f.read())
-        else:
-            self.send_response(404)
-            self.send_header("Content-Type", "text/plain")
-            self.end_headers()
-            self.wfile.write(b"404 Not Found")
+            # If file doesn't exist and has no extension, fallback to index.html (SPA route / health check)
+            if not os.path.exists(file_path) and not os.path.splitext(url_path)[1]:
+                file_path = os.path.join(PUBLIC_DIR, "index.html")
+
+            if os.path.exists(file_path) and os.path.isfile(file_path):
+                self.send_response(200)
+                if file_path.endswith(".html"):
+                    self.send_header("Content-Type", "text/html; charset=utf-8")
+                elif file_path.endswith(".css"):
+                    self.send_header("Content-Type", "text/css")
+                elif file_path.endswith(".js"):
+                    self.send_header("Content-Type", "application/javascript")
+                elif file_path.endswith(".zip"):
+                    self.send_header("Content-Type", "application/zip")
+                    self.send_header("Content-Disposition", "attachment; filename=blacktide_evidence.zip")
+                elif file_path.endswith(".jpg") or file_path.endswith(".jpeg"):
+                    self.send_header("Content-Type", "image/jpeg")
+                else:
+                    self.send_header("Content-Type", "application/octet-stream")
+                
+                self.send_header("X-Content-Type-Options", "nosniff")
+                self.send_header("X-Frame-Options", "DENY")
+                self.end_headers()
+
+                with open(file_path, "rb") as f:
+                    self.wfile.write(f.read())
+            else:
+                self.send_response(404)
+                self.send_header("Content-Type", "text/plain")
+                self.end_headers()
+                self.wfile.write(b"404 Not Found")
+        except (BrokenPipeError, ConnectionResetError):
+            pass
 
     def do_POST(self):
-        content_len = int(self.headers.get('Content-Length', 0))
-        post_bytes = self.rfile.read(content_len)
-        
         try:
-            req_data = json.loads(post_bytes.decode('utf-8'))
-        except Exception:
-            req_data = {}
+            content_len = int(self.headers.get('Content-Length', 0))
+            post_bytes = self.rfile.read(content_len)
+            
+            try:
+                req_data = json.loads(post_bytes.decode('utf-8'))
+            except Exception:
+                req_data = {}
 
-        url_path = urllib.parse.urlparse(self.path).path
+            url_path = urllib.parse.urlparse(self.path).path
 
-        if url_path == "/api/login":
-            flag_input = req_data.get("flag1", "").strip()
-            if flag_input == FLAG1:
-                sess_id = str(uuid.uuid4())
-                sess = get_session(sess_id)
-                sess["authenticated"] = True
-                sess["solved_flags"].append(FLAG1)
-                
-                resp = {
-                    "success": True,
-                    "session_token": sess_id,
-                    "message": "Access granted to Aegis Staging Server!",
-                    "user": sess["user"],
-                    "cwd": sess["cwd"],
-                    "flag1": FLAG1,
-                    "flag_status": {
+            if url_path == "/api/login":
+                flag_input = req_data.get("flag1", "").strip()
+                if flag_input == FLAG1:
+                    sess_id = str(uuid.uuid4())
+                    sess = get_session(sess_id)
+                    sess["authenticated"] = True
+                    sess["solved_flags"].append(FLAG1)
+                    
+                    resp = {
+                        "success": True,
+                        "session_token": sess_id,
+                        "message": "Access granted to Aegis Staging Server!",
+                        "user": sess["user"],
+                        "cwd": sess["cwd"],
                         "flag1": FLAG1,
+                        "flag_status": {
+                            "flag1": FLAG1,
+                            "flag2": FLAG2 if FLAG2 in sess["solved_flags"] else None,
+                            "flag3": FLAG3 if FLAG3 in sess["solved_flags"] else None
+                        }
+                    }
+                else:
+                    resp = {
+                        "success": False,
+                        "message": "The gate did not recognize that sigil. The first sigil is buried within the evidence pack recovered from the breach scene."
+                    }
+                
+                self.send_response(200)
+                self.send_header("Content-Type", "application/json")
+                self.end_headers()
+                self.wfile.write(json.dumps(resp).encode('utf-8'))
+                return
+
+            if url_path == "/api/terminal":
+                sess_id = req_data.get("session_token", "")
+                cmd = req_data.get("command", "")
+                sess = get_session(sess_id)
+
+                if not sess.get("authenticated"):
+                    resp = {"success": False, "output": "UNAUTHORIZED: Initial access flag required."}
+                else:
+                    output = process_terminal_command(sess, cmd)
+                    flag_status = {
+                        "flag1": FLAG1 if FLAG1 in sess["solved_flags"] else None,
                         "flag2": FLAG2 if FLAG2 in sess["solved_flags"] else None,
                         "flag3": FLAG3 if FLAG3 in sess["solved_flags"] else None
                     }
-                }
-            else:
-                resp = {
-                    "success": False,
-                    "message": "The gate did not recognize that sigil. The first sigil is buried within the evidence pack recovered from the breach scene."
-                }
-            
-            self.send_response(200)
-            self.send_header("Content-Type", "application/json")
+                    resp = {
+                        "success": True,
+                        "output": output,
+                        "user": sess["user"],
+                        "cwd": sess["cwd"],
+                        "is_root": sess["is_root"],
+                        "flag_status": flag_status,
+                        "solved_flags": sess["solved_flags"]
+                    }
+
+                self.send_response(200)
+                self.send_header("Content-Type", "application/json")
+                self.end_headers()
+                self.wfile.write(json.dumps(resp).encode('utf-8'))
+                return
+
+            self.send_response(400)
             self.end_headers()
-            self.wfile.write(json.dumps(resp).encode('utf-8'))
-            return
-
-        if url_path == "/api/terminal":
-            sess_id = req_data.get("session_token", "")
-            cmd = req_data.get("command", "")
-            sess = get_session(sess_id)
-
-            if not sess.get("authenticated"):
-                resp = {"success": False, "output": "UNAUTHORIZED: Initial access flag required."}
-            else:
-                output = process_terminal_command(sess, cmd)
-                flag_status = {
-                    "flag1": FLAG1 if FLAG1 in sess["solved_flags"] else None,
-                    "flag2": FLAG2 if FLAG2 in sess["solved_flags"] else None,
-                    "flag3": FLAG3 if FLAG3 in sess["solved_flags"] else None
-                }
-                resp = {
-                    "success": True,
-                    "output": output,
-                    "user": sess["user"],
-                    "cwd": sess["cwd"],
-                    "is_root": sess["is_root"],
-                    "flag_status": flag_status,
-                    "solved_flags": sess["solved_flags"]
-                }
-
-            self.send_response(200)
-            self.send_header("Content-Type", "application/json")
-            self.end_headers()
-            self.wfile.write(json.dumps(resp).encode('utf-8'))
-            return
-
-        self.send_response(400)
-        self.end_headers()
+        except (BrokenPipeError, ConnectionResetError):
+            pass
 
 import socket
 
